@@ -19,9 +19,9 @@ navigation:                # accepts {file, title, url, icon, sidebaricon}
   - {file: "README.md"}
 
 external:                  # shows a footer with social links - for available icons see fontawesome.com/icons
-  - {title: Mail, icon: envelope, url: "mailto:niklasbuschmann@users.noreply.github.com"}
+  #- {title: Mail, icon: envelope, url: "mailto:niklasbuschmann@users.noreply.github.com"}
   - {title: Github, icon: github, url: "https://github.com/RFC1918-hub"}
-  - {title: Subscribe, icon: rss, url: "/feed.xml"}
+  #- {title: Subscribe, icon: rss, url: "/feed.xml"}
 
 comments:
   disqus_shortname: "rfc1918"    # see https://disqus.com/
