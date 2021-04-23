@@ -27,5 +27,7 @@ comments:
   disqus_shortname: "rfc1918"    # see https://disqus.com/
 #  isso_domain: ""         # see https://posativ.org/isso/
 
+google_analytics: G-DCX88DHKT8
+
 plugins:
  - jekyll-feed
