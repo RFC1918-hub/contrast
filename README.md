@@ -4,4 +4,4 @@ permalink: "/about/"
 layout: page
 ---
 
-| Pentest+ | eJPT |
+\| Pentest+ \| eJPT \|
