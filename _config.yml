@@ -28,6 +28,7 @@ comments:
 #  isso_domain: ""         # see https://posativ.org/isso/
 
 google_analytics: G-DCX88DHKT8
+baseurl: /blog
 
 plugins:
  - jekyll-feed

@@ -10,7 +10,7 @@
 	{% for post in posts %}
 	  {% if post.categories contains t %}
 	  <li>
-	    <a href="{{ include.post.url | relative_url }}">{{ post.title }}</a>
+	    <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
 	    <span class="date">{{ post.date | date: "%B %-d, %Y"  }}</span>
 	  </li>
 	  {% endif %}
