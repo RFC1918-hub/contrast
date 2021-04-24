@@ -2,4 +2,12 @@
   <h1><a href="{{ include.post.url | relative_url }}">{{ include.post.title }}</a></h1>
   {%- assign date_format = site.date_format | default: "%B %d, %Y" -%}
   <time datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: date_format }}</time>
+  <h5>{% if include.post.categories.size > 0 %}
+    Categor{% if include.post.categories.size > 1 %}ies{% else %}y{% endif %}:
+    {{ include.post.categories | sort | join: ", " }}
+  {% endif %}<br>
+  {% if include.post.tags.size > 0 %}
+    Tag{% if include.post.tags.size > 1 %}s{% endif %}:
+    {{ include.post.tags | sort | join: ", " }}
+  {% endif %}</h5>  
 </header>
