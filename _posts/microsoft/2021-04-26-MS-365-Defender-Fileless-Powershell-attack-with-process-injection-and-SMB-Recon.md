@@ -5,10 +5,9 @@ category: [Microsoft, Simulated Attacks, Microsoft Defender]
 tags: [powershell, fileless, shellcode, c2, microsoft, microsoft defender]
 ---
 
-## Microsoft 365 Defender attack simulations: Fileless Powershell attack with process injection and SMB Recon
-
 ### Summary:
 Today I will be doing a deep dive into the new Microsoft 365 Defender attack simulations. I will be looking into the ***Fileless Powershell attack with process injection and SMB Recon*** command script, analyzing the Powershell command script to determine what it will do as well as extracting IOC's (Indicators of Compromise) along the way. This analysis will be done without referencing the Microsoft documentations to demonstrate the investigation process related to a suspicious Powershell command script. Analyzing how it behaves and extracting the necessary IOC's from it to actively block and detect related threats.
+<!--break-->
 
 ### The Initial Powershell Command Script: 
 
@@ -78,7 +77,7 @@ Lastly will execute the content within $decryptBytes using Invoke-Expression.
 
 To be able to retrieve the data output I simply ran the commands within my Kali environment being careful not to invoke the command. 
 
-![](/assets/images/Pasted_image_20210426115115.png)
+![](/assets/images/ms-fileless-ps-smb-recon/Pasted_image_20210426115115.png)
 
 From our output we can see that this command serves as a stager for a second Powershell script. 
 
@@ -250,13 +249,13 @@ https://onlinedisassembler.com/odaweb/
 
 This will dissemble my shellcode to assembly as well as provide us with a hexdump of the shellcode. 
 
-![](/assets/images/Pasted_image_20210426121313.png)
+![](/assets/images/ms-fileless-ps-smb-recon/Pasted_image_20210426121313.png)
 
 From this hexdump we are already able to see some interesting strings. 
 
 I then proceeded to throw the hexdump into CyberChef to extract the strings. 
 
-![](/assets/images/Pasted_image_20210426122022.png)
+![](/assets/images/ms-fileless-ps-smb-recon/Pasted_image_20210426122022.png)
 
 From this we are able to see a lot of valuable information and get an idea of what the shellcode will execute. 
 
@@ -264,7 +263,7 @@ Based off the strings the shellcode looks to be using winhttp.dll to communicate
 
 Looking into the IP, it looks to me mimicking a C2 server and that the string "MyHovercraftIsFullOfEels" signals that it is a payload "calling". 
 
-![](/assets/images/Pasted_image_20210426122728.png)
+![](/assets/images/ms-fileless-ps-smb-recon/Pasted_image_20210426122728.png)
 
 ### Extracting the IOC's
 
