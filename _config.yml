@@ -30,7 +30,7 @@ comments:
 #  isso_domain: ""         # see https://posativ.org/isso/
 
 google_analytics: G-DCX88DHKT8
-baseurl: /blog
+url: "https://rfc-infosec.com"
 
 plugins:
  - jekyll-feed
