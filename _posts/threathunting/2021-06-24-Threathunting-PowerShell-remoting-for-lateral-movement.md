@@ -152,7 +152,7 @@ Privileges:		SeSecurityPrivilege
 
 **Event ID 4624:** 
 
-We can see that this activity will generate a logon type 3 (Network) with the logon process being *NtlmSsp* and authentication package *NTML*
+We can see that this activity will generate a logon type 3 (Network) with the logon a process of *NtlmSsp* and authentication package of *NTML*
 
 ```sql
 An account was successfully logged on.
@@ -200,7 +200,7 @@ Detailed Authentication Information:
 
 **Event ID 1:** 
 
-We can see when connected with WinRM *svchost* will spawn and process for *wsmprovhost*. 
+We can see when connecting to a target using WinRM *svchost* will spawn a new process for *wsmprovhost*. 
 
 ```sql 
 06/24/2021 06:33:18 AM
@@ -246,7 +246,7 @@ Using the Logon ID we can track any child processes being created within the Log
 
 > Logon ID:	0x64D3D4
 
-We are able to see all child process will have a parent image of  *wsmprovhost.exe*. 
+We can see that call new process being spawned will have a parent image of *wsmprovhost.exe*. 
 
 *whoami.exe* process being spawned: 
 
@@ -276,7 +276,7 @@ ParentImage: C:\Windows\System32\wsmprovhost.exe
 ParentCommandLine: C:\Windows\system32\wsmprovhost.exe -Embedding
 ```
 
-*ipconfig.exe* process  being spawned:
+*ipconfig.exe* process being spawned:
 
 ```sql
 Process Create:
@@ -304,7 +304,7 @@ ParentImage: C:\Windows\System32\wsmprovhost.exe
 ParentCommandLine: C:\Windows\system32\wsmprovhost.exe -Embedding
 ```
 
-Below image show a timeline view of all events within the given Logon sessions. 
+Below image shows a timeline view of all events within the given logon sessions. 
 ![](/assets/images/powershell_remoting_threathunting//windows_timeline.png)
 
 **Elastic Cloud:**
