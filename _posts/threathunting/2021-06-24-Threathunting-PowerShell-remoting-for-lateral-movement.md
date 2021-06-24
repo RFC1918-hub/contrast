@@ -40,7 +40,7 @@ Domain: BLACKJACK.local
 
 User: ACE (Domain Admin account)
 
-**Monitoring: **
+#### Monitoring:
 - Local Splunk intance running on DEALER
 - Elastic Cloud with Winlogbeat setup. 
 
@@ -48,7 +48,7 @@ User: ACE (Domain Admin account)
 
 **Use case 1 (evil-winrm):**
 
-Connecting from my KALI instance to DEALER through evil-winrm for lateral movement. 
+Connecting from my KALI instance to DEALER using evil-winrm. 
 
 ```bash
 ┌──(kali㉿kali)-[~/Documents/projects]
@@ -95,15 +95,7 @@ GROUP INFORMATION
 Group Name                                       Type             SID                                         Attributes
 ================================================ ================ =========================================== 
 Everyone                                         Well-known group S-1-1-0                                     Mandatory group, Enabled by default, Enabled group
-BUILTIN\Users                                    Alias            S-1-5-32-545                                Mandatory group, Enabled by default, Enabled group
-BUILTIN\Pre-Windows 2000 Compatible Access       Alias            S-1-5-32-554                                Mandatory group, Enabled by default, Enabled group
-BUILTIN\Administrators                           Alias            S-1-5-32-544                                Mandatory group, Enabled by default, Enabled group, Group owner
-NT AUTHORITY\NETWORK                             Well-known group S-1-5-2                                     Mandatory group, Enabled by default, Enabled group
-NT AUTHORITY\Authenticated Users                 Well-known group S-1-5-11                                    Mandatory group, Enabled by default, Enabled group
-NT AUTHORITY\This Organization                   Well-known group S-1-5-15                                    Mandatory group, Enabled by default, Enabled group
-BLACKJACK\Domain Admins                          Group            S-1-5-21-160870316-2314245498-532306953-512 Mandatory group, Enabled by default, Enabled group
-BLACKJACK\Denied RODC Password Replication Group Alias            S-1-5-21-160870316-2314245498-532306953-572 Mandatory group, Enabled by default, Enabled group, Local Group
-NT AUTHORITY\NTLM Authentication                 Well-known group S-1-5-64-10                                 Mandatory group, Enabled by default, Enabled group
+**TRUNC**
 Mandatory Label\High Mandatory Level             Label            S-1-16-12288
 
 
@@ -113,30 +105,7 @@ PRIVILEGES INFORMATION
 Privilege Name                            Description                                                        State
 ========================================= ================================================================== =======
 SeIncreaseQuotaPrivilege                  Adjust memory quotas for a process                                 Enabled
-SeMachineAccountPrivilege                 Add workstations to domain                                         Enabled
-SeSecurityPrivilege                       Manage auditing and security log                                   Enabled
-SeTakeOwnershipPrivilege                  Take ownership of files or other objects                           Enabled
-SeLoadDriverPrivilege                     Load and unload device drivers                                     Enabled
-SeSystemProfilePrivilege                  Profile system performance                                         Enabled
-SeSystemtimePrivilege                     Change the system time                                             Enabled
-SeProfileSingleProcessPrivilege           Profile single process                                             Enabled
-SeIncreaseBasePriorityPrivilege           Increase scheduling priority                                       Enabled
-SeCreatePagefilePrivilege                 Create a pagefile                                                  Enabled
-SeBackupPrivilege                         Back up files and directories                                      Enabled
-SeRestorePrivilege                        Restore files and directories                                      Enabled
-SeShutdownPrivilege                       Shut down the system                                               Enabled
-SeDebugPrivilege                          Debug programs                                                     Enabled
-SeSystemEnvironmentPrivilege              Modify firmware environment values                                 Enabled
-SeChangeNotifyPrivilege                   Bypass traverse checking                                           Enabled
-SeRemoteShutdownPrivilege                 Force shutdown from a remote system                                Enabled
-SeUndockPrivilege                         Remove computer from docking station                               Enabled
-SeEnableDelegationPrivilege               Enable computer and user accounts to be trusted for delegation     Enabled
-SeManageVolumePrivilege                   Perform volume maintenance tasks                                   Enabled
-SeImpersonatePrivilege                    Impersonate a client after authentication                          Enabled
-SeCreateGlobalPrivilege                   Create global objects                                              Enabled
-SeIncreaseWorkingSetPrivilege             Increase a process working set                                     Enabled
-SeTimeZonePrivilege                       Change the time zone                                               Enabled
-SeCreateSymbolicLinkPrivilege             Create symbolic links                                              Enabled
+**TRUNC**
 SeDelegateSessionUserImpersonatePrivilege Obtain an impersonation token for another user in the same session Enabled
 
 
@@ -152,139 +121,20 @@ Kerberos support for Dynamic Access Control on this device has been disabled.
 
 **Splunk:** 
 
-Reviewing Splunk I first started looking for any logon events (Event ID 4624) for the user ACE. 
+The following three events where created when spawning a shell using evil-winrm. 
 
-```splunk
-index="wineventlogs" EventCode=4624 ACE
-```
+- Event ID 4672: Special privileges assigned to new logon.
+- Event ID 4624: An account was successfully logged on.
+- Event ID 1: Process Create (rule: ProcessCreate) 
 
-We can see that this execution will generate a logon type 3 with the logon process being NtlmSsp and authentication package being NTLM. 
-
-```sql
-06/22/2021 06:58:23 AM
-LogName=Security
-EventCode=4624
-EventType=0
-ComputerName=dealer.blackjack.local
-SourceName=Microsoft Windows security auditing.
-Type=Information
-RecordNumber=16486
-Keywords=Audit Success
-TaskCategory=Logon
-OpCode=Info
-Message=An account was successfully logged on.
-
-Subject:
-	Security ID:		S-1-0-0
-	Account Name:		-
-	Account Domain:		-
-	Logon ID:		0x0
-
-Logon Information:
-	Logon Type:		3
-	Restricted Admin Mode:	-
-	Virtual Account:		No
-	Elevated Token:		Yes
-
-Impersonation Level:		Impersonation
-
-New Logon:
-	Security ID:		S-1-5-21-160870316-2314245498-532306953-1103
-	Account Name:		ACE
-	Account Domain:		BLACKJACK
-	Logon ID:		0x64D3D4
-	Linked Logon ID:		0x0
-	Network Account Name:	-
-	Network Account Domain:	-
-	Logon GUID:		{00000000-0000-0000-0000-000000000000}
-
-Process Information:
-	Process ID:		0x0
-	Process Name:		-
-
-Network Information:
-	Workstation Name:	-
-	Source Network Address:	-
-	Source Port:		-
-
-Detailed Authentication Information:
-	Logon Process:		NtLmSsp 
-	Authentication Package:	NTLM
-	Transited Services:	-
-	Package Name (NTLM only):	NTLM V2
-	Key Length:		128
-
-This event is generated when a logon session is created. It is generated on the computer that was accessed.
-
-The subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
-
-The logon type field indicates the kind of logon that occurred. The most common types are 2 (interactive) and 3 (network).
-
-The New Logon fields indicate the account for whom the new logon was created, i.e. the account that was logged on.
-
-The network fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
-
-The impersonation level field indicates the extent to which a process in the logon session can impersonate.
-
-The authentication information fields provide detailed information about this specific logon request.
-	- Logon GUID is a unique identifier that can be used to correlate this event with a KDC event.
-	- Transited services indicate which intermediate services have participated in this logon request.
-	- Package name indicates which sub-protocol was used among the NTLM protocols.
-	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.
-```
-
-Using the Logon ID we can drill-down into all events that was logged within the unique logon session.
-
-> Logon ID:		0x64D3D4
-
-We can see that every time a PowerShell Remote Sessions is establish it will create a new process for wsmprovhost.exe
-
-**Process Hacker:**
-
-![](/assets/images/powershell_remoting_threathunting/process_hacker_wsmprovhost.png)
-
-Furthermore we can see our logon events as well as our process creations for whoami.exe and ipconfig.exe. 
-
-![](/assets/images/powershell_remoting_threathunting//windows_timeline.png)
-
-**Windows Log Timeline:** 
-
-Wsmprovhost process created: 
-
-```sql
-Process Create:
-RuleName: -
-UtcTime: 2021-06-22 13:58:23.907
-ProcessGuid: {a95c9ede-ec7f-60d1-c7d7-640000000000}
-ProcessId: 5336
-Image: C:\Windows\System32\wsmprovhost.exe
-FileVersion: 10.0.17763.1852 (WinBuild.160101.0800)
-Description: Host process for WinRM plug-ins
-Product: Microsoft® Windows® Operating System
-Company: Microsoft Corporation
-OriginalFileName: wsmprovhost.exe
-CommandLine: C:\Windows\system32\wsmprovhost.exe -Embedding
-CurrentDirectory: C:\Windows\system32\
-User: BLACKJACK\ACE
-LogonGuid: {a95c9ede-ec7f-60d1-d4d3-640000000000}
-LogonId: 0x64D3D4
-TerminalSessionId: 0
-IntegrityLevel: High
-Hashes: MD5=09F572A6ED60FDE02F8B9471AA896EBC,SHA256=12FA07164960F1C7362404449E4755F7DB494DDA7D369D8EABB2B56D92EBEC67,IMPHASH=75953E6C912ADB7F5C32D66F1A60AA30
-ParentProcessGuid: {00000000-0000-0000-0000-000000000000}
-ParentProcessId: 760
-ParentImage: -
-ParentCommandLine: -
-```
-
-Special privileges assigned to new logon:
+**Event ID 4672:**
 
 ```sql
 Special privileges assigned to new logon.
 
 Subject:
-	Security ID:		S-1-5-21-160870316-2314245498-532306953-1103
-	Account Name:		ACE
+	Security ID:		S-1-5-21-160870316-2314245498-532306953-1104
+	Account Name:		jack_winrm
 	Account Domain:		BLACKJACK
 	Logon ID:		0x64D3D4
 
@@ -300,7 +150,9 @@ Privileges:		SeSecurityPrivilege
 			SeEnableDelegationPrivilege
 ```
 
-Type 3 logon for the user ACE: 
+**Event ID 4624:** 
+
+We can see that this activity will generate a logon type 3 (Network) with the logon process being *NtlmSsp* and authentication package *NTML*
 
 ```sql
 An account was successfully logged on.
@@ -320,8 +172,8 @@ Logon Information:
 Impersonation Level:		Impersonation
 
 New Logon:
-	Security ID:		S-1-5-21-160870316-2314245498-532306953-1103
-	Account Name:		ACE
+	Security ID:		S-1-5-21-160870316-2314245498-532306953-1104
+	Account Name:		jack_winrm
 	Account Domain:		BLACKJACK
 	Logon ID:		0x64D3D4
 	Linked Logon ID:		0x0
@@ -344,27 +196,59 @@ Detailed Authentication Information:
 	Transited Services:	-
 	Package Name (NTLM only):	NTLM V2
 	Key Length:		128
-
-This event is generated when a logon session is created. It is generated on the computer that was accessed.
-
-The subject fields indicate the account on the local system which requested the logon. This is most commonly a service such as the Server service, or a local process such as Winlogon.exe or Services.exe.
-
-The logon type field indicates the kind of logon that occurred. The most common types are 2 (interactive) and 3 (network).
-
-The New Logon fields indicate the account for whom the new logon was created, i.e. the account that was logged on.
-
-The network fields indicate where a remote logon request originated. Workstation name is not always available and may be left blank in some cases.
-
-The impersonation level field indicates the extent to which a process in the logon session can impersonate.
-
-The authentication information fields provide detailed information about this specific logon request.
-	- Logon GUID is a unique identifier that can be used to correlate this event with a KDC event.
-	- Transited services indicate which intermediate services have participated in this logon request.
-	- Package name indicates which sub-protocol was used among the NTLM protocols.
-	- Key length indicates the length of the generated session key. This will be 0 if no session key was requested.
 ```
 
-whoami process created: 
+**Event ID 1:** 
+
+We can see when connected with WinRM *svchost* will spawn and process for *wsmprovhost*. 
+
+```sql 
+06/24/2021 06:33:18 AM
+LogName=Microsoft-Windows-Sysmon/Operational
+EventCode=1
+EventType=4
+ComputerName=dealer.blackjack.local
+User=NOT_TRANSLATED
+Sid=S-1-5-18
+SidType=0
+SourceName=Microsoft-Windows-Sysmon
+Type=Information
+RecordNumber=76122
+Keywords=None
+TaskCategory=Process Create (rule: ProcessCreate)
+OpCode=Info
+Message=Process Create:
+RuleName: -
+UtcTime: 2021-06-24 13:33:18.445
+ProcessGuid: {a95c9ede-899e-60d4-e391-2d0300000000}
+ProcessId: 6276
+Image: C:\Windows\System32\wsmprovhost.exe
+FileVersion: 10.0.17763.1852 (WinBuild.160101.0800)
+Description: Host process for WinRM plug-ins
+Product: Microsoft® Windows® Operating System
+Company: Microsoft Corporation
+OriginalFileName: wsmprovhost.exe
+CommandLine: C:\Windows\system32\wsmprovhost.exe -Embedding
+CurrentDirectory: C:\Windows\system32\
+User: BLACKJACK\jack_winrm
+LogonGuid: {a95c9ede-899e-60d4-478e-2d0300000000}
+LogonId: 0x64D3D4
+TerminalSessionId: 0
+IntegrityLevel: High
+Hashes: MD5=09F572A6ED60FDE02F8B9471AA896EBC,SHA256=12FA07164960F1C7362404449E4755F7DB494DDA7D369D8EABB2B56D92EBEC67,IMPHASH=75953E6C912ADB7F5C32D66F1A60AA30
+ParentProcessGuid: {a95c9ede-5df7-60d2-c773-000000000000}
+ParentProcessId: 760
+ParentImage: C:\Windows\System32\svchost.exe
+ParentCommandLine: C:\Windows\system32\svchost.exe -k DcomLaunch -p
+```
+
+Using the Logon ID we can track any child processes being created within the Logon sessions. 
+
+> Logon ID:	0x64D3D4
+
+We are able to see all child process will have a parent image of  *wsmprovhost.exe*. 
+
+*whoami.exe* process being spawned: 
 
 ```sql
 Process Create:
@@ -392,7 +276,7 @@ ParentImage: C:\Windows\System32\wsmprovhost.exe
 ParentCommandLine: C:\Windows\system32\wsmprovhost.exe -Embedding
 ```
 
-ipconfig process created:
+*ipconfig.exe* process  being spawned:
 
 ```sql
 Process Create:
@@ -420,21 +304,8 @@ ParentImage: C:\Windows\System32\wsmprovhost.exe
 ParentCommandLine: C:\Windows\system32\wsmprovhost.exe -Embedding
 ```
 
-Log off event: 
-
-```sql
-An account was logged off.
-
-Subject:
-	Security ID:		S-1-5-21-160870316-2314245498-532306953-1103
-	Account Name:		ACE
-	Account Domain:		BLACKJACK
-	Logon ID:		0x64D3D4
-
-Logon Type:			3
-
-This event is generated when a logon session is destroyed. It may be positively correlated with a logon event using the Logon ID value. Logon IDs are only unique between reboots on the same computer.
-```
+Below image show a timeline view of all events within the given Logon sessions. 
+![](/assets/images/powershell_remoting_threathunting//windows_timeline.png)
 
 **Elastic Cloud:**
 
