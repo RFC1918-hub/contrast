@@ -1,39 +1,36 @@
-title: "RFC1918 Blog"
-author: "RFC1918"
-description: "~#"
-permalink: /:title/
-lang: "en"
-excerpt_separator: "<!--break-->"
-date_format: "%B %d, %Y"
+title: RFC1918 Blog
+author: RFC1918 
+description: >- # this means to ignore newlines until "baseurl:"
+  ~#
+permalink: /:categories/:title/
+url: "rfc-infosec" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: _rfc1918
+github_username:  RFC1918-hub
 
-# Layout
-
-show_excerpts: true        # show article excerpts on the home page
-show_frame: true           # adds a gray frame to the site
-show_sidebar: true        # show a sidebar instead of the usual header
-
-# Menu
-
-navigation:                # accepts {file, title, url, icon, sidebaricon}
-  - {file: "index.html"}
-  - {file: "categories.html"}
-  - {file: "tags.html"}
-  - {file: "search.html"}
-#  - {file: "README.md"} # about page
-
-external:                  # shows a footer with social links - for available icons see fontawesome.com/icons
-  #- {title: Mail, icon: envelope, url: "mailto:niklasbuschmann@users.noreply.github.com"}
-  - {title: Github, icon: github, url: "https://github.com/RFC1918-hub"}
-  - {title: Linkedin, icon: linkedin, url: "https://www.linkedin.com/in/pinortje/"}
-  #- {title: Subscribe, icon: rss, url: "/feed.xml"}
-
-
-comments:
-  disqus_shortname: "rfc-infosec"    # see https://disqus.com/
-#  isso_domain: ""         # see https://posativ.org/isso/
-
-google_analytics: G-DCX88DHKT8
-url: "https://rfc-infosec.com"
+# Build settings
+remote_theme: niklasbuschmann/contrast@v2.11
 
 plugins:
- - jekyll-feed
+  - jekyll-remote-theme
+  - jekyll-paginate
+
+# site settings 
+excerpt_separator: "<!--break-->"
+
+# navigation sidebar
+navigation:
+  - {file: index.html}
+  - {file: categories.html}
+  - {file: search.html}
+
+external:
+  - {title: Github, icon: github, url: "https://github.com/RFC1918-hub"}
+  - {title: Linkedin, icon: linkedin, url: "https://www.linkedin.com/in/pinortje/"}
+
+# pagination settings 
+paginate: 5 # displays 5 posts per page
+paginate_path: "/page:num/"
+
+# google analytics
+google_analytics: G-DCX88DHKT8
+url: "https://rfc-infosec.com"

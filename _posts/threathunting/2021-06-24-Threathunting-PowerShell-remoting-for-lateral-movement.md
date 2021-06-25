@@ -1,11 +1,9 @@
 ---
 title: "Threathunting: PowerShell remoting for lateral movement"
 layout: post
-category: [Threathunting, Splunk, Elastic Siem, WinRM] 
+category: [Blue Teaming] 
 tags: [powershell, WinRM, remote, lateral movement, threathunting]
 ---
-
-## PowerShell remoting for lateral movement.
 
 ### What is PowerShell remoting. 
 > "Using the WS-Management protocol, Windows PowerShell remoting lets you run any Windows PowerShell command on one or more remote computers. You can establish persistent connections, start interactive sessions, and run scripts on remote computers.

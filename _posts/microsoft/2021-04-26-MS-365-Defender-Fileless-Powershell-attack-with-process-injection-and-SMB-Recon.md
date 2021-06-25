@@ -1,7 +1,7 @@
 ---
 title: "Microsoft 365 Defender attack simulations: Fileless Powershell attack with process injection and SMB Recon"
 layout: post
-category: [Microsoft, Simulated Attacks, Microsoft Defender] 
+category: [Microsoft Defender] 
 tags: [powershell, fileless, shellcode, c2, microsoft, microsoft defender]
 ---
 
