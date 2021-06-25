@@ -317,20 +317,20 @@ Reviewing the same logs within Elastic Cloud.
 
 ## Detection: 
 
-**Detection initial WinRM session:** 
+**Detecting initial WinRM session:** 
 
 **Splunk SPL:** 
 
 ```sql 
-index="wineventlogs" sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 ParentImage="C:\\Windows\\System32\\svchost.exe" Image="*wsmprovhost.exe*"
+index="wineventlogs" sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 ParentImage="C:\\Windows\\System32\\svchost.exe" Image="C:\\Windows\\System32\\wsmprovhost.exe"
 ```
 
-**Detection child processes spawned by WinRM session:** 
+**Detecting child processes spawned by WinRM session:** 
 
 **Splunk SPL:** 
 
 ```sql 
-index="wineventlogs" sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 ParentImage="*wsmprovhost.exe*"
+index="wineventlogs" sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 ParentImage="C:\\Windows\\System32\\wsmprovhost.exe"
 ```
 
 **Tracking all events for giving session:**
@@ -338,7 +338,7 @@ index="wineventlogs" sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operationa
 **Splunk SPL:**
 
 ```sql
-index="wineventlogs" sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" LogonId=0x20A2F24
+index="wineventlogs" LogonId=0x20A2F24 OR Logon_ID=0x20A2F24
 ```
 
 ### References: 
