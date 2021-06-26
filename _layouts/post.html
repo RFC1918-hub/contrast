@@ -2,8 +2,12 @@
 layout: default
 ---
 
+{% include head.html %}
+{% include btt.html %}
+
 <article>
-  {% include head.html %}
   {% include meta.html post=page %}
   {{ content }}
 </article>
+
+{% include footer.html %}

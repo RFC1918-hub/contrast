@@ -1,0 +1,67 @@
+<!-- Styles your button (this is a black square with white text) -->
+<style>
+  .back-to-top {
+    opacity: 0;
+    color: #FFFFFF;
+    transition: opacity .6s ease-in-out;
+    z-index: 999;
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+    border-radius: 0%;
+  }
+
+  a.back-to-top {
+    font-weight: 1000;
+    letter-spacing: 2px;
+    font-size: 46px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 0;
+    padding-left: 2px;
+    padding-top: 14px;
+  }
+
+  .back-to-top:hover {
+    color: #68f;
+  }
+
+  .back-to-top.show {
+    opacity: 1;
+  }
+</style>
+
+<!-- Adds the back to top link to your website -->
+<a href="#" id="back-to-top" class="back-to-top" style="display: inline;"><i class="fas fa-arrow-alt-circle-up"></i></a>
+
+<!-- Fades in the button when you scroll down -->
+<script>
+  var link = document.getElementById("back-to-top");
+  var amountScrolled = 0;
+
+  window.addEventListener('scroll', function(e) {
+      if ( window.pageYOffset > amountScrolled ) {
+          link.classList.add('show');
+      } else {
+          link.className = 'back-to-top';
+      }
+  });  
+<!-- Scrolls to Top -->
+  link.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      var distance = 0 - window.pageYOffset;
+      var increments = distance/(500/16);
+      function animateScroll() {
+          window.scrollBy(0, increments);
+          if (window.pageYOffset <= document.body.offsetTop) {
+              clearInterval(runAnimation);
+          }
+      };
+      // Loop the animation function
+      var runAnimation = setInterval(animateScroll, 16);
+  });
+</script>
