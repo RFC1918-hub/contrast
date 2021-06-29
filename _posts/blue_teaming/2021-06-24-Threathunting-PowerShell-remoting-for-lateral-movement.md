@@ -322,7 +322,7 @@ Reviewing the same logs within Elastic Cloud.
 **Splunk SPL:** 
 
 ```sql 
-index="wineventlogs" sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 ParentImage="C:\\Windows\\System32\\svchost.exe" Image="C:\\Windows\\System32\\wsmprovhost.exe"
+index="wineventlogs" sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 Image="C:\\Windows\\System32\\wsmprovhost.exe"
 ```
 
 **Detecting child processes spawned by WinRM session:** 
