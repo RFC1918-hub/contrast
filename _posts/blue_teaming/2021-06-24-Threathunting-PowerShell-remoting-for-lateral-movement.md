@@ -259,7 +259,7 @@ Using the Logon ID we can track any child processes being created within the Log
 index="wineventlogs" LogonId=0x64D3D4 EventCode=1
 ```
 
-We can see that call new process being spawned will have a parent image of *wsmprovhost.exe*. 
+We can see that all new processes being spawned will have a parent image of *wsmprovhost.exe*. 
 
 *whoami.exe* process being spawned: 
 
