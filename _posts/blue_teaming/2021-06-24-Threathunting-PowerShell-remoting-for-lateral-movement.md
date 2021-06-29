@@ -48,6 +48,8 @@ User: ACE (Domain Admin account)
 
 Connecting from my KALI instance to DEALER using evil-winrm. 
 
+<script id="asciicast-FOnbpNNWhbRHFsLScwrJKPfA9" src="https://asciinema.org/a/FOnbpNNWhbRHFsLScwrJKPfA9.js" async></script>
+
 ```bash
 ┌──(kali㉿kali)-[~/Documents/projects]
 └─$ evil-winrm -i 192.168.35.5 -u ACE -p 'P@$$W0rD'
