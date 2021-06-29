@@ -242,9 +242,22 @@ ParentImage: C:\Windows\System32\svchost.exe
 ParentCommandLine: C:\Windows\system32\svchost.exe -k DcomLaunch -p
 ```
 
+## Threat hunting:
+
+We are able to track all events that was logged within the given logon session by tracking the unique logon ID. This should give a timeline view of processes and events being spawned and created within the given session. The logon ID can we either found within the logon or process create event logs or by doing local forensics you are able to see the logon ID for the wsmprovhost.exe process currently running by reviewing the process in Sysinternal's Process Explorer. 
+
+**Sysinternal's Process Explorer:**
+
+![](/assets/images/powershell_remoting_threathunting/process_explorer_logon_id.png)
+
 Using the Logon ID we can track any child processes being created within the Logon sessions. 
 
+> Our unique logon ID: 
 > Logon ID:	0x64D3D4
+
+```sql
+index="wineventlogs" LogonId=0x64D3D4 EventCode=1
+```
 
 We can see that call new process being spawned will have a parent image of *wsmprovhost.exe*. 
 
